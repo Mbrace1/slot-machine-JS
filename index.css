@@ -65,7 +65,7 @@ table {
     display: flex;
     justify-content: space-evenly;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
     width: 100%;
     height: 60vh;
 }
@@ -90,12 +90,6 @@ table {
     left: 34vw;
 }
 
-.slot-symbol {
-    width: 12vw;
-    height: 15vh;
-    background: red;
-}
-
 .extra-slot-btns {
     display: flex;
     justify-content: center;
@@ -110,3 +104,25 @@ table {
     height: 10vh;
     margin: 1vw;
 }
+
+.slot-symbol {
+    width: 12vw;
+    height: 15vh;
+    background: red;
+    /* animation-name: spin;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    transform-origin: center center; */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+

@@ -6,6 +6,8 @@ const listOfSymbols = ["red", "green", "blue", "orange", "yellow", "purple"];
 //     reel3 = [],
 // ]
 
+// refactor this into a state machine
+
 class slotMachine {
 
     spinDuration = 2;
@@ -16,21 +18,25 @@ class slotMachine {
         this.symbols = symbols;
         this.spinDuration = spinDuration * 1000; // convert to secs
         this.slotResult = [];
-        this.tl = gsap.timeline();
+        this.symbolPositions = [];
+        this.allSymbolsHTML = document.getElementsByClassName("slot-symbol");
+
         this.slotWidth;
         this.slotHeight;
         this.symbolWidth;
         this.symbolHeight;
         this.allSlots = document.querySelectorAll('.slot-reel');
 
+        this.isSpinning = false;
+
         this.setup();
         debugger
     }
 
     setup() {
-        this.tl.pause();
         this.getSlotMachineProperties();
         this.setUpSpinAnimation();
+        this.getSymbolPositions();
     }
 
     getSlotMachineProperties() {
@@ -41,47 +47,54 @@ class slotMachine {
         this.symbolWidth = SymbolProperties.width;
         this.symbolHeight = SymbolProperties.height;
     }
+
+    getSymbolPositions(current = false) {
+        for (let i = 0; i < this.allSymbolsHTML.length; i++) {
+            this.symbolPositions.push(this.allSymbolsHTML[i].getBoundingClientRect());
+        }
+    }
     //TODO resize function for slotmachine on diff devices
     //TODO create function to build up html
 
     setUpSpinAnimation() {
         //TODO need to figure out wrapping
         //TODO land on whole symbol
-        // how does wrap work
         const totalHeight= 5*this.symbolHeight;
         const wrapOffsetTop = this.symbolHeight/-2;
-        const wrapOffsetBottom = totalHeight+wrapOffsetTop;
-        var wrap = gsap.utils.wrap(wrapOffsetTop,wrapOffsetBottom);
-        const yheight = "-=" + totalHeight;
-            debugger
-            this.tl.to(".slot-symbol", {
-                duration: 2,
+        
+        const yheight = "+=" + totalHeight;
+    }
+
+    moveSymbols() {
+        debugger
+        if (this.isSpinning) {
+            gsap.to('.slot-symbol', {
                 ease: "none",
-                y: yheight,
-                x: "0",
-                modifiers: {
-                  y: gsap.utils.unitize(wrap),
-                },
-                repeat: -1
-            });
+                y: "+= 10px",
+                onComplete: () => {
+                    this.moveSymbols();
+                }
+            })
+        } else {
+            console.log("spinning didnt work")
+        }
+
+            // check position
+            // reset position to top
+            // change symbol
+            // continue to loop
     }
 
     startSpin() {
         this.emptyPrevSlotResult();
+        this.isSpinning = true;
         // TODO figure out how to tween sprites to move and blur
-        // this.allSlots.forEach((slot) => {
-        //   slot.style.transition = 'none';
-        //   slot.style.transform = 'translateY(0)';
-        // });
-        this.tl.play();
-        setTimeout(() => {
-            this.generateResult();
-            this.tl.pause();
-        }, this.spinDuration);
+        this.moveSymbols();
     }
 
     stopSpin() {
         // TODO 
+        this.isSpinning = false;
         this.displayResult();
     }
 
@@ -150,4 +163,5 @@ theSpinBtn.addEventListener("click", handleStartSpin)
 
 function handleStartSpin() {
     mySlotMachine.startSpin();
+    // setTimeout(mySlotMachine.stopSpin(), 5000)
 }
