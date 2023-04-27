@@ -1,5 +1,6 @@
 const listOfSymbols = ["red", "green", "blue", "orange", "yellow", "purple"];
-
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 // const slotResult = [
 //     reel1 = ["red","red", "yellow", "red", "blue"],
 //     reel2 = [],
@@ -7,12 +8,15 @@ const listOfSymbols = ["red", "green", "blue", "orange", "yellow", "purple"];
 // ]
 
 // refactor this into a state machine
+// refactor using canvas
 
 class slotMachine {
 
     spinDuration = 2;
 
-    constructor(reels, reelLength, symbols, spinDuration) {
+    constructor(canvas, ctx ,reels, reelLength, symbols, spinDuration) {
+        this.canvas = canvas;
+        this.ctx = ctx;
         this.reels = reels;
         this.reelLength = reelLength;
         this.symbols = symbols;
@@ -29,8 +33,26 @@ class slotMachine {
 
         this.isSpinning = false;
 
-        this.setup();
-        debugger
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    
+        if( this.canvas.getContext )
+        {
+            setInterval( this.update , 30 );
+        }
+    }
+
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        console.log("resized")
+    }
+
+    //TODO build machine
+    //TODO create update func
+
+    update() {
+        console.log("hi")
     }
 
     setup() {
@@ -54,7 +76,6 @@ class slotMachine {
         }
     }
     //TODO resize function for slotmachine on diff devices
-    //TODO create function to build up html
 
     setUpSpinAnimation() {
         //TODO need to figure out wrapping
@@ -152,16 +173,20 @@ class slotMachine {
     }
 }
 
-const mySlotMachine = new slotMachine(3, 5, listOfSymbols, 6);
+const mySlotMachine = new slotMachine(canvas, ctx, 3, 5, listOfSymbols, 6);
+
+window.onresize = slotMachine.resize;
+
 // let number = 1;
 // const test = document.getElementById(`slot-reel-${number.toString()}`)
 // debugger
 // TODO add event listner to this on button press
-const theSpinBtn = document.getElementById("theSpinBtn");
+// const theSpinBtn = document.getElementById("theSpinBtn");
 
-theSpinBtn.addEventListener("click", handleStartSpin)
+// theSpinBtn.addEventListener("click", handleStartSpin)
 
-function handleStartSpin() {
-    mySlotMachine.startSpin();
-    // setTimeout(mySlotMachine.stopSpin(), 5000)
-}
+// function handleStartSpin() {
+//     mySlotMachine.startSpin();
+//     // setTimeout(mySlotMachine.stopSpin(), 5000)
+// }
+

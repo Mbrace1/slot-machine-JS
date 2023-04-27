@@ -5,42 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./index.css">
-    <title>SLot Game</title>
+    <title>Slot Game</title>
 </head>
 <body>
-    <div class="slot-machine" id="slot-machine">
-        <div class="slot-bg">
-            <div class="slot-reels">
-                <div class="slot-reel" id="slot-reel-0">
-                    <div class="slot-symbol slot-position-0">1</div>
-                    <div class="slot-symbol slot-position-1">2</div>
-                    <div class="slot-symbol slot-position-2">3</div>
-                    <div class="slot-symbol slot-position-3">4</div>
-                    <div class="slot-symbol slot-position-4">5</div>
-                </div>
-                <div class="slot-reel" id="slot-reel-1">
-                    <div class="slot-symbol slot-position-0">1</div>
-                    <div class="slot-symbol slot-position-1">2</div>
-                    <div class="slot-symbol slot-position-2">3</div>
-                    <div class="slot-symbol slot-position-3">4</div>
-                    <div class="slot-symbol slot-position-4">5</div>
-                </div>
-                <div class="slot-reel" id="slot-reel-2">
-                    <div class="slot-symbol slot-position-0">1</div>
-                    <div class="slot-symbol slot-position-1">2</div>
-                    <div class="slot-symbol slot-position-2">3</div>
-                    <div class="slot-symbol slot-position-3">4</div>
-                    <div class="slot-symbol slot-position-4">5</div>
-                </div>
-            </div>
-        </div>
-        <div class="extra-slot-btns">
-            <button class="slot-btn bet-btn-lower">-</button>
-            <button class="slot-btn bet-btn-higher">+</button>
-            <button class="slot-btn paytable-btn">Info</button>
-        </div>
-        <button class="slot-btn spin-btn" id="theSpinBtn">Spin</button>
-    </div>
+    <canvas id="gameCanvas" width="" height=""></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
     <script src="./index.js"></script>
 </body>
