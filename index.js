@@ -48,10 +48,20 @@ class slotMachine {
         this.symbolHeight = SymbolProperties.height;
     }
 
-    getSymbolPositions(current = false) {
+    getSymbolPositions() {
+        let newPositions = [];
         for (let i = 0; i < this.allSymbolsHTML.length; i++) {
-            this.symbolPositions.push(this.allSymbolsHTML[i].getBoundingClientRect());
+            newPositions.push(this.allSymbolsHTML[i].getBoundingClientRect());
         }
+        this.symbolPositions = newPositions;
+    }
+
+    setSymbolPositions() {
+        let newPositions = [];
+        for (let i = 0; i < this.allSymbolsHTML.length; i++) {
+            newPositions.push(this.allSymbolsHTML[i].getBoundingClientRect());
+        }
+        this.symbolPositions = newPositions;
     }
     //TODO resize function for slotmachine on diff devices
     //TODO create function to build up html
@@ -67,7 +77,17 @@ class slotMachine {
 
     moveSymbols() {
         debugger
+        this.setSymbolPositions()
+        this.getSymbolPositions()
         if (this.isSpinning) {
+            for (let i = 0; i < this.symbolPositions.length; i ++) {
+                if (this.symbolPositions[i].y > this.slotHeight - 100) {
+                    //reset position
+                    this.symbolPositions[i].y = - this.symbolHeight;
+                    debugger
+                }
+            }
+
             gsap.to('.slot-symbol', {
                 ease: "none",
                 y: "+= 10px",
