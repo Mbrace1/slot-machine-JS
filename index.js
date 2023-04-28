@@ -1,11 +1,17 @@
 const listOfSymbols = ["red", "green", "blue", "orange", "yellow", "purple"];
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-// const slotResult = [
-//     reel1 = ["red","red", "yellow", "red", "blue"],
-//     reel2 = [],
-//     reel3 = [],
-// ]
+
+const slotConfig = {
+    slotWidth: 500,
+    slotHeight: 500,
+    recoilHeight: null,
+    spinDuration: null,
+    numberOfReels: 3,
+    symbolsPerReel: 5,
+    symbols: listOfSymbols
+    // etc
+}
 
 // refactor this into a state machine
 // refactor using canvas
@@ -14,44 +20,80 @@ class slotMachine {
 
     spinDuration = 2;
 
-    constructor(canvas, ctx ,reels, reelLength, symbols, spinDuration) {
-        this.canvas = canvas;
+    constructor(canvas, ctx , config) {
         this.ctx = ctx;
-        this.reels = reels;
-        this.reelLength = reelLength;
-        this.symbols = symbols;
-        this.spinDuration = spinDuration * 1000; // convert to secs
-        this.slotResult = [];
-        this.symbolPositions = [];
-        this.allSymbolsHTML = document.getElementsByClassName("slot-symbol");
-
-        this.slotWidth;
-        this.slotHeight;
-        this.symbolWidth;
-        this.symbolHeight;
-        this.allSlots = document.querySelectorAll('.slot-reel');
-
-        this.isSpinning = false;
-
+        this.canvas = canvas;
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        
+        this.config = config;
+        this.spinDuration = config.spinDuration * 1000; // convert to secs
+        this.slotResult = [];
+        this.symbolPositions = [];
+
+        //slot
+        this.slotWidth = this.canvas.width;
+        this.slotHeight = this.canvas.height;
+        //reels
+        this.reelSpacing = (this.slotWidth/3) -20
+        this.offsetTop = 100;
+        this.offsetLeft = 100;
+        this.reelWidth = 100;
+        this.reelHeight = 300;
+
+        this.isSpinning = false;
+        
     
         if( this.canvas.getContext )
         {
             setInterval( this.update , 30 );
         }
+
+        window.addEventListener('resize', this.resizeCanvas.bind(this), false);
+
+        this.drawSlot();
+
     }
 
-    resize() {
+    resizeCanvas() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        console.log("resized")
+
+        this.slotWidth = this.canvas.width 
+        this.slotHeight = this.canvas.height
+        this.offsetTop = Math.floor(this.slotHeight/100);
+        this.offsetLeft = Math.floor(this.slotWidth/100);
+        this.reelWidth = Math.floor(this.slotWidth/100);
+        this.reelHeight = Math.floor(this.slotHeight/300);
+
+        this.drawSlot();
     }
 
     //TODO build machine
-    //TODO create update func
+    drawSlot() {
+        // frame
+        // 4 reels
+        // 5 symbols, 2 hidden per reel
+        for (let i = 0; i < this.slotWidth; i+= this.reelSpacing) {
+            this.ctx.fillStyle = "red";
+            this.ctx.fillRect(i + this.offsetLeft, this.offsetTop, 
+                this.reelWidth, this.reelHeight);
+        }
+
+
+
+        // for (let i = 0; i < this.config.numberOfReels; i++) {
+        //     this.ctx.fillStyle = "red";
+        //     this.ctx.fillRect(i + 350, 0, 300, 300);
+        //     for (let j = 0; j < this.config.symbolsPerReel; j++) {
+        //         this.ctx.fillStyle = "green";
+        //         this.ctx.fillRect(i, j + 200, 150, 100);
+        //     }
+        // }
+    }
 
     update() {
+    //TODO create update func
         console.log("hi")
     }
 
@@ -59,6 +101,7 @@ class slotMachine {
         this.getSlotMachineProperties();
         this.setUpSpinAnimation();
         this.getSymbolPositions();
+
     }
 
     getSlotMachineProperties() {
@@ -76,15 +119,6 @@ class slotMachine {
         }
     }
     //TODO resize function for slotmachine on diff devices
-
-    setUpSpinAnimation() {
-        //TODO need to figure out wrapping
-        //TODO land on whole symbol
-        const totalHeight= 5*this.symbolHeight;
-        const wrapOffsetTop = this.symbolHeight/-2;
-        
-        const yheight = "+=" + totalHeight;
-    }
 
     moveSymbols() {
         debugger
@@ -173,9 +207,7 @@ class slotMachine {
     }
 }
 
-const mySlotMachine = new slotMachine(canvas, ctx, 3, 5, listOfSymbols, 6);
-
-window.onresize = slotMachine.resize;
+const mySlotMachine = new slotMachine(canvas, ctx, slotConfig);
 
 // let number = 1;
 // const test = document.getElementById(`slot-reel-${number.toString()}`)
